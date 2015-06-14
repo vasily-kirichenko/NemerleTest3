@@ -1,0 +1,31 @@
+﻿#pragma light
+
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using System;
+using System.Collections.Generic;
+using System.Console;
+using System.Linq;
+using MacroLibrary1;
+using Hopac;
+using Microsoft.FSharp.Core;
+using Hopac.TopLevel;
+
+module Program
+{
+    Main() : void
+    {
+        def job = Job.result(0);
+        def x = job >>== (x => Job.result(x));
+        def res = run(job);
+        
+        def a1 = Alt.unit();
+        def a2 = Alt.unit();
+        
+        def a3 = select (a1);
+
+        WriteLine(res);
+        _ = ReadLine();
+    }
+}
