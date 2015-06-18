@@ -74,11 +74,20 @@
       <HintPath>$(Nemerle)\Nemerle.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <MacroReference Include="Nemerle.ComputationExpressions.Macros, Version=1.2.0.447, Culture=neutral, PublicKeyToken=e080a9c724e2bfcd">
+      <Name>Nemerle.ComputationExpressions.Macros</Name>
+      <AssemblyName>Nemerle.ComputationExpressions.Macros.dll</AssemblyName>
+      <HintPath>C:\Program Files (x86)\Nemerle\net-4.0\Nemerle.ComputationExpressions.Macros.dll</HintPath>
+      <Private>False</Private>
+    </MacroReference>
     <MacroReference Include="Nemerle.Linq">
       <HintPath>$(Nemerle)\Nemerle.Linq.dll</HintPath>
     </MacroReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComputationExpressions.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Main.n" />
     <Compile Include="Properties\AssemblyInfo.n" />
   </ItemGroup>

@@ -1,31 +1,44 @@
-﻿#pragma light
+﻿#pragma indent
 
-using Nemerle.Collections;
-using Nemerle.Text;
-using Nemerle.Utility;
-using System;
-using System.Collections.Generic;
-using System.Console;
-using System.Linq;
-using MacroLibrary1;
-using Hopac;
-using Microsoft.FSharp.Core;
-using Hopac.TopLevel;
+using Nemerle.Collections
+using Nemerle.Text
+using Nemerle.Utility
+using Nemerle.ComputationExpressions
+using System
+using System.Collections.Generic
+using System.Console
+using System.Linq
+using MacroLibrary1
+using Hopac
+using Microsoft.FSharp.Core
+using Hopac.TopLevel
+using NemerleTest3.ComputationExpressions.Maybe
 
 module Program
-{
     Main() : void
-    {
-        def job = Job.result(0);
-        def x = job >>== (x => Job.result(x));
-        def res = run(job);
+        def x = comp list
+            foreach (i in $[1..10])
+                when (i % 2 == 0)
+                    yield i
+                
+        def m = comp maybe
+            defcomp x = Some(1)
+            defcomp y = Some(2)
+            foreach (m in [Some(1), Some(2), None(), Some(3)])
+                yieldcomp m
+            yield x + y
+            returncomp Some(x - y)
+                    
+        WriteLine ($"m = $m")
         
-        def a1 = Alt.unit();
-        def a2 = Alt.unit();
+        //def job = Job.result(0);
+        //def x = job >>== (x => Job.result(x));
+        //def res = run(job);
         
-        def a3 = select (a1);
+        //def a1 = Alt.unit();
+        //def a2 = Alt.unit();
+        
+        //def a3 = select (a1);
 
-        WriteLine(res);
+        //WriteLine(res);
         _ = ReadLine();
-    }
-}

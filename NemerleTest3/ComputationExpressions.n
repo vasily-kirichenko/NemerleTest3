@@ -1,0 +1,41 @@
+﻿#pragma indent
+
+using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using System;
+using Nemerle.ComputationExpressions
+
+namespace NemerleTest3.ComputationExpressions
+    public module Maybe
+        public class Maybe
+            public Zero[A](): option[A] { None() }
+            public Delay[A] (cont: void -> option[A]): option[A] { cont() }
+            public Return[A](a: A): option[A] { Some(a) }
+            public Yield[A](a: A): option[A] { Some(a) }
+            public ReturnComp[A](m: option[A]): option[A] { m }
+            public YieldComp[A](m: option[A]): option[A] { m }
+            public Bind[A, B](m: option[A], f: A -> option[B]): option[B]
+                match (m)
+                 | Some (x) => f(x)
+                 | None => None()
+            While[A](guard: void -> bool, body: option[A]): option[A]
+                if (guard ())
+                    Bind (body, _ => While (guard, body))
+                else Zero ()
+            public ForEach[A, B] (coll: Seq[A], body: A -> option[B]): option[B]
+                using (e = coll.GetEnumerator())
+                    While (e.MoveNext, Delay (_ => 
+                    { 
+                        def curr = e.Current;
+                        body(curr)
+                    }))
+            public Combine[A] (m1: option[A], m2: option[A]): option[A]
+                match (m1)
+                 | None => None()
+                 | Some() => m2
+
+        public maybe: Maybe = Maybe()
+    
+    
