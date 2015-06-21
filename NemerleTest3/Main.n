@@ -13,30 +13,54 @@ using Hopac
 using Microsoft.FSharp.Core
 using Hopac.TopLevel
 using NemerleTest3.ComputationExpressions.Maybe
+using System.Diagnostics
 
 module Program
+    //class C {}
+    
+    //variant DU
+     //| Case1 { value: int }
+
     Main() : void
-        def x = comp list
-            foreach (i in $[1..10])
-                when (i % 2 == 0)
-                    yield i
+        def x = sha1("0102030405060708091011121314151617181920");     
+        WriteLine(x.Length); 
+    
+        //def fib (n) 
+        //    if (n < 2) n else fib(n - 1) + fib(n - 2)
+        //def fib (n) 
+//            match (n)
+  //           | _ when (n < 2) => n 
+    //         | _ => fib(n - 1) + fib(n - 2)
+    
+        //def w = Stopwatch.StartNew()
+        //foreach (n in $[0..39])
+          //  WriteLine ($"fib($n) = $(fib(n))")
+        //WriteLine($"Elapsed $(w.Elapsed)")
+        //def c = C()
+        //def c1: C = null
+        //def d: DU = null
+    
+        //def x = comp list
+        //    foreach (i in $[1..10])
+        //        when (i % 2 == 0)
+        //            yield i
                 
-        def m = comp maybe
-            defcomp x = Some(1)
-            defcomp y = Some(2)
-            foreach (m in [Some(1), Some(2), None(), Some(3)])
-                yieldcomp m
-            yield x + y
-            returncomp Some(x - y)
+        //def m = comp maybe
+        //    defcomp x = Some(1)
+        //    defcomp y = Some(2)
+        //    foreach (m in [Some(1), Some(2), None(), Some(3)])
+        //        yieldcomp m
+        //    yield x + y
+        //    returncomp Some(x - y)
                     
-        WriteLine ($"m = $m")
+        //WriteLine ($"m = $m")
         
-        //def job = Job.result(0);
-        //def x = job >>== (x => Job.result(x));
-        //def res = run(job);
+        ////def job = Job.result(0);
+        ////def x = job >>== (x => Job.result(x));
+        ////def res = run(job);
         
-        //def a1 = Alt.unit();
-        //def a2 = Alt.unit();
+        ////def a1 = Alt.unit();
+        ////def a2 = Alt.unit();
         
         //def a3 = select (a1);
 

@@ -17,9 +17,6 @@ namespace MacroLibrary1
         <[ $op1 * $op2 ]>
     }
 
-    /// <summary>
-    /// Bind.
-    /// </summary>
     public macro @>>==(x, x2yJ) {
         Impl.bind(x, x2yJ)
     }
