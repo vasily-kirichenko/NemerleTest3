@@ -4,11 +4,9 @@ using Nemerle.Compiler;
 using Nemerle.Text;
 using Nemerle.Utility;
 using Nemerle.Internal;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Hopac;
 
 namespace MacroLibrary1
 {
@@ -17,26 +15,26 @@ namespace MacroLibrary1
         <[ $op1 * $op2 ]>
     }
 
-    public macro @>>==(x, x2yJ) {
-        Impl.bind(x, x2yJ)
-    }
+    //public macro @>>==(x, x2yJ) {
+    //    Impl.bind(x, x2yJ)
+    //}
     
-    public macro choose(alts)
-    syntax ("select", "(", alts, ")")
-    {
-        <[ 
-            def list = List();
-            foreach (a in ..$alts) list.Add(a);
-            Alt.choose(a); 
-        ]>
-    }
+    //public macro choose(alts)
+    //syntax ("select", "(", alts, ")")
+    //{
+    //    <[ 
+    //        def list = List();
+    //        foreach (a in ..$alts) list.Add(a);
+    //        Alt.choose(a); 
+    //    ]>
+    //}
     
-    using Microsoft.FSharp.Core;
-    using Nemerle.Compiler.Parsetree;
+    //using Microsoft.FSharp.Core;
+    //using Nemerle.Compiler.Parsetree;
     
-    module Impl {
-        internal bind (x: PExpr, x2yJ: PExpr) : PExpr {
-            <[ Job.bind(FSharpFunc.FromConverter($x2yJ), $x) ]>
-        }
-    }
+    //module Impl {
+    //    internal bind (x: PExpr, x2yJ: PExpr) : PExpr {
+    //        <[ Job.bind(FSharpFunc.FromConverter($x2yJ), $x) ]>
+    //    }
+    //}
 }

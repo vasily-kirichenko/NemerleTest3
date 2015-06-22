@@ -5,7 +5,6 @@ using Nemerle.Compiler.Parsetree;
 using Nemerle.Compiler.Typedtree;
 using Nemerle.Text;
 using Nemerle.Utility;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,21 +23,26 @@ namespace MacroLibrary1
             match (str) {
              | <[ $(s: string) ]> => 
                 def allowedChars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
-                if (s.Length :> byte != length || !s.ForAll(allowedChars.Contains)) {
-                    Message.Error($"Expecting hex string of size $length");
+                if (s.Length :> byte != length) {
+                    Message.Error($"Expecting string of size $length.");
+                    <[]>
+                }
+                else if (!s.ForAll(allowedChars.Contains)) {
+                    Message.Error("Expecting hex string.");
                     <[]>
                 }
                 else 
                 {
-                    def stringToByteArray(hex: string) {
-                        Enumerable.Range(0, hex.Length)
-                         .Where(x => x % 2 == 0)
-                         .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
-                         .ToArray()
-                    }
-                
-                    def res = stringToByteArray(s);
-                    <[ $(res: array[byte]) ]>
+                    <[
+                        def stringToByteArray(hex: string) {
+                            $[0..hex.Length - 1]
+                             .Where(x => x % 2 == 0)
+                             .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
+                             .ToArray()
+                        }
+                        
+                        stringToByteArray($s);
+                    ]>
                 }
              | expr => throw Exception($"Expected hex string, but got $expr.");
             }
