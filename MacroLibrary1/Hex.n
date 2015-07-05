@@ -1,4 +1,5 @@
-﻿using Nemerle;
+﻿#pragma indent
+using Nemerle;
 using Nemerle.Collections;
 using Nemerle.Compiler;
 using Nemerle.Compiler.Parsetree;
@@ -10,42 +11,24 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace MacroLibrary1
-{
-    public macro sha1(str) {
+    public macro sha1(str)
         HexImpl.Transform(Macros.ImplicitCTX(), 40, str)
-    }
 
     module HexImpl
-    {
+        allowedChars: list[char] = $['0'..'9'] + $['A'..'F']
+        
         public Transform(typer: Typer, length: byte, str: PExpr) : PExpr
-        {
             Macros.DefineCTX(typer);
-            match (str) {
-             | <[ $(s: string) ]> => 
-                def allowedChars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
-                if (s.Length :> byte != length) {
-                    Message.Error($"Expecting string of size $length.");
-                    <[]>
-                }
-                else if (!s.ForAll(allowedChars.Contains)) {
-                    Message.Error("Expecting hex string.");
-                    <[]>
-                }
-                else 
-                {
-                    <[
-                        def stringToByteArray(hex: string) {
-                            $[0..hex.Length - 1]
-                             .Where(x => x % 2 == 0)
-                             .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
-                             .ToArray()
-                        }
-                        
-                        stringToByteArray($s);
-                    ]>
-                }
+            match (str)
+             | <[ $(s: string) ]> when (s.Length != length) =>
+                    Message.Error($"Expecting string of size $length, but was $(s.Length)"); <[]>
+             | <[ $(s: string) ]> =>
+                    match (s.Filter(x => !allowedChars.Contains(x)))
+                     | [] => 
+                         <[
+                            $[0..$s.Length - 1].MapToArrayFiltered(
+                                x => x % 2 == 0, 
+                                x => Convert.ToByte($s.Substring(x, 2), 16));
+                        ]>
+                     | wrongChars => Message.Error($"Wrong characters in hex string: $wrongChars"); <[]>
              | expr => throw Exception($"Expected hex string, but got $expr.");
-            }
-        }
-    }
-}

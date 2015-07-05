@@ -14,24 +14,9 @@ using System.Diagnostics
 
 module Program
     Main() : void
-        
-    
-    
-    
-    
-        def x = sha1("01020304050607080910111213141");
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        WriteLine(x.Length); 
+        //WriteLine($['0'..'9'] + $['A'..'F']);
+        def x = sha1("0102030405060708090A0B0C0D0E0F1011121314");
+        WriteLine(x.ToNList()); 
     
         
         //def m = comp maybe
