@@ -25,10 +25,9 @@ namespace MacroLibrary1
              | <[ $(s: string) ]> =>
                     match (s.Filter(x => !allowedChars.Contains(x)))
                      | [] => 
-                         <[
-                            $[0..$s.Length - 1].MapToArrayFiltered(
-                                x => x % 2 == 0, 
-                                x => Convert.ToByte($s.Substring(x, 2), 16));
-                        ]>
+                         def arr = $[0..s.Length - 1].MapToArrayFiltered(
+                                       x => x % 2 == 0, 
+                                       x => <[ ($(Convert.ToByte(s.Substring(x, 2), 16)) : byte)]>)
+                         <[ array [..$arr] ]>
                      | wrongChars => Message.Error($"Wrong characters in hex string: $wrongChars"); <[]>
              | expr => throw Exception($"Expected hex string, but got $expr.");
