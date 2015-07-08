@@ -1,0 +1,91 @@
+﻿#pragma indent
+using Nemerle
+using Nemerle.Collections
+using Nemerle.Compiler
+using Nemerle.Compiler.Parsetree
+using Nemerle.Compiler.Typedtree
+using Nemerle.Text
+using Nemerle.Utility
+using System
+using System.Collections.Generic
+using System.Linq
+using System.Text.RegularExpressions 
+
+namespace MacroLibrary1
+    //macro IniFile(filePath: string)
+      //  IniFileImpl.DoTransform(Macros.ImplicitCTX(), filePath)
+
+    module Parser
+        type Key = string
+        type Value = string
+        
+        [Record]\
+        public class Setting 
+            Key: Key
+            Value: Value
+        
+        type SectionName = string
+        
+        [Record]\
+        public class Section 
+            Name: SectionName
+            Settings: list[Setting]
+        
+        public variant Stream
+         | Stream    
+               pos: int
+               lines: list [string]
+        
+        public comment (s: Stream): option[(string * Stream)]
+            match (s)
+             | Stream (n, line :: rest) =>
+                 regexp match(line)
+                  | @"^\s*;.*" => Some(line, Stream.Stream(n, rest))
+                  | _ => None()
+             | _ => None()
+        
+        //let (|Header|_|) = function
+        //    | Regex @"\[\s*(\S+)\s*\]" ([_; name], s) -> Some (name, s)
+        //    | _ -> None
+        
+        //let (|Setting|_|) = function
+        //    | Regex @"\s*(\S+)\s*=\s*([^;]*)" ([_; key; value], s) -> Some ({ Key = key; Value = value }, s)
+        //    | _ -> None
+        
+        //let (|Settings|_|) s =
+        //    let rec loop s settings =
+        //        match s with
+        //        | Setting (setting, s) -> loop s (setting :: settings)
+        //        | Comment s -> loop s settings
+        //        | _ -> (List.rev settings, s)
+        //    let settings, s = loop s []
+        //    Some (settings, s) 
+        
+        //let rec (|Section|_|) = function
+        //    | Header (name, Settings (settings, s)) -> Some ({ Name = name; Settings = settings }, s)
+        //    | _ -> None
+        
+        //let (|Sections|_|) s =
+        //    let rec loop s sections =
+        //        match s with
+        //        | Section (section, s) -> loop s (section :: sections)
+        //        | Comment s -> loop s sections
+        //        | _ -> (sections |> List.rev, s)
+        //    let sections, s = loop s []
+        //    Some (sections, s)
+        
+        //let streamOfLines lines = Stream (0, lines |> Seq.filter (not << String.IsNullOrWhiteSpace) |> List.ofSeq)
+        //let streamOfFile path = File.ReadLines path |> streamOfLines
+        //let parse path = 
+        //    match streamOfFile path with
+        //    | Sections (sections, _) -> Choice1Of2 sections
+        //    | e -> Choice2Of2 e
+    
+    //module IniFileImpl
+    //{
+    //    public DoTransform(typer : Typer, ) : PExpr
+    //    {
+    //        Macros.DefineCTX(typer);
+    //// TODO: Add implementation here.
+    //;
+    //    }

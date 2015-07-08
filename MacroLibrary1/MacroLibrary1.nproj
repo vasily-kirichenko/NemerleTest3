@@ -61,6 +61,9 @@
     <Compile Include="Hex.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IniFile.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Macro1.n" />
     <Compile Include="Properties\AssemblyInfo.n" />
   </ItemGroup>
