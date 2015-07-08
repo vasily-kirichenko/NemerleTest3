@@ -36,17 +36,21 @@ namespace MacroLibrary1
                pos: int
                lines: list [string]
         
-        public comment (s: Stream): option[(string * Stream)]
+        comment (s: Stream): option[(string * Stream)]
             match (s)
              | Stream (n, line :: rest) =>
-                 regexp match(line)
+                 regexp match (line)
                   | @"^\s*;.*" => Some(line, Stream.Stream(n, rest))
                   | _ => None()
              | _ => None()
         
-        //let (|Header|_|) = function
-        //    | Regex @"\[\s*(\S+)\s*\]" ([_; name], s) -> Some (name, s)
-        //    | _ -> None
+        header (s: Stream): option[(string * Stream)]
+            match (s)
+             | Stream (n, line :: rest) =>
+                 regexp match (line)
+                  | @"\[\s*(?<name>\S+)\s*\]" => Some(name, Stream.Stream(n, rest))
+                  | _ => None()
+             | _ => None()
         
         //let (|Setting|_|) = function
         //    | Regex @"\s*(\S+)\s*=\s*([^;]*)" ([_; key; value], s) -> Some ({ Key = key; Value = value }, s)
