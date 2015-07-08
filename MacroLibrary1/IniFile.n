@@ -7,6 +7,7 @@ using Nemerle.Compiler.Typedtree
 using Nemerle.Text
 using Nemerle.Utility
 using System
+using System.IO
 using System.Collections.Generic
 using System.Linq
 using System.Text.RegularExpressions 
@@ -36,7 +37,7 @@ namespace MacroLibrary1
                pos: int
                lines: list [string]
         
-        comment (s: Stream): option[(string * Stream)]
+        comment (s: Stream): option[string * Stream]
             match (s)
              | Stream (n, line :: rest) =>
                  regexp match (line)
@@ -44,7 +45,7 @@ namespace MacroLibrary1
                   | _ => None()
              | _ => None()
         
-        header (s: Stream): option[(string * Stream)]
+        header (s: Stream): option[string * Stream]
             match (s)
              | Stream (n, line :: rest) =>
                  regexp match (line)
@@ -52,38 +53,54 @@ namespace MacroLibrary1
                   | _ => None()
              | _ => None()
         
-        //let (|Setting|_|) = function
-        //    | Regex @"\s*(\S+)\s*=\s*([^;]*)" ([_; key; value], s) -> Some ({ Key = key; Value = value }, s)
-        //    | _ -> None
+        setting (s: Stream): option[Setting * Stream]
+            match (s)
+             | Stream (n, line :: rest) =>
+                regexp match (line)
+                 | @"\s*(?<key>\S+)\s*=\s*(?<value>[^;]*)" => Some (Setting(key, value), Stream.Stream(n, rest))
+                 | _ => None()
+             | _ => None()
         
-        //let (|Settings|_|) s =
-        //    let rec loop s settings =
-        //        match s with
-        //        | Setting (setting, s) -> loop s (setting :: settings)
-        //        | Comment s -> loop s settings
-        //        | _ -> (List.rev settings, s)
-        //    let settings, s = loop s []
-        //    Some (settings, s) 
+        settings (s: Stream): option[list[Setting] * Stream]
+            def loop (s, settings)
+                match (setting(s))
+                 | Some ((setting, s)) => loop (s, setting :: settings)
+                 | None =>
+                    match (comment(s))
+                     | Some ((_, s)) => loop (s, settings)
+                     | None => (settings.Reverse(), s)
+            def (settings, s) = loop (s, [])
+            Some (settings, s)
         
-        //let rec (|Section|_|) = function
-        //    | Header (name, Settings (settings, s)) -> Some ({ Name = name; Settings = settings }, s)
-        //    | _ -> None
+        section (s: Stream): option[Section * Stream]
+            match (header(s))
+             | Some ((name, s)) =>
+                match (settings(s))
+                 | Some ((settings, s)) => Some (Section (name, settings), s)
+                 | _ => None()
+             | _ => None()
         
-        //let (|Sections|_|) s =
-        //    let rec loop s sections =
-        //        match s with
-        //        | Section (section, s) -> loop s (section :: sections)
-        //        | Comment s -> loop s sections
-        //        | _ -> (sections |> List.rev, s)
-        //    let sections, s = loop s []
-        //    Some (sections, s)
+        sections (s: Stream): option[list[Section] * Stream]
+            def loop (s, sections)
+                match (section(s))
+                 | Some ((section, s)) => loop (s, section :: sections)
+                 | None => 
+                    match (comment(s))
+                     | Some ((_, s)) => loop(s, sections)
+                     | _ => (sections.Reverse(), s)
+            def (sections, s) = loop (s, [])
+            Some (sections, s)
         
-        //let streamOfLines lines = Stream (0, lines |> Seq.filter (not << String.IsNullOrWhiteSpace) |> List.ofSeq)
-        //let streamOfFile path = File.ReadLines path |> streamOfLines
-        //let parse path = 
-        //    match streamOfFile path with
-        //    | Sections (sections, _) -> Choice1Of2 sections
-        //    | e -> Choice2Of2 e
+        streamOfLines (lines: Seq[string]): Stream
+            Stream.Stream (0, lines.Filter(x => !String.IsNullOrWhiteSpace(x)))
+        
+        streamOfFile (path: string): Stream
+            streamOfLines(File.ReadLines(path))
+            
+        public parse(path: string): option[list[Section]]
+            match (sections(streamOfFile(path)))
+             | Some ((sections, _)) => Some(sections)
+             | None => None()
     
     //module IniFileImpl
     //{
