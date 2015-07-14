@@ -7,7 +7,7 @@ using Nemerle.Utility;
 using System;
 using Nemerle.ComputationExpressions
 
-namespace NemerleTest3.ComputationExpressions
+namespace MacroLibrary1.ComputationExpressions
     public module Maybe
         public class Maybe
             public Zero[A](): option[A] { None() }

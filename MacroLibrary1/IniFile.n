@@ -13,8 +13,8 @@ using System.Linq
 using System.Text.RegularExpressions 
 
 namespace MacroLibrary1
-    //macro IniFile(filePath: string)
-      //  IniFileImpl.DoTransform(Macros.ImplicitCTX(), filePath)
+    macro IniFile(filePath: string)
+        IniFileImpl.DoTransform(Macros.ImplicitCTX(), filePath)
 
     module Parser
         type Key = string
@@ -102,11 +102,11 @@ namespace MacroLibrary1
              | Some ((sections, _)) => Some(sections)
              | None => None()
     
-    //module IniFileImpl
-    //{
-    //    public DoTransform(typer : Typer, ) : PExpr
-    //    {
-    //        Macros.DefineCTX(typer);
-    //// TODO: Add implementation here.
-    //;
-    //    }
+    module IniFileImpl
+        public DoTransform(typer: Typer, filePath: string) : PExpr
+            Macros.DefineCTX(typer)
+            def sections = 
+                match (Parser.parse(filePath))
+                 | Some(sections) => sections.Map(x => PExpr.Const(x))
+                 | None => []
+            <[ list[..$sections] ]>

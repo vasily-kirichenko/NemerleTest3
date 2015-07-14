@@ -37,6 +37,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
+    <Reference Include="Nemerle.ComputationExpressions, Version=1.2.0.447, Culture=neutral, PublicKeyToken=e080a9c724e2bfcd">
+      <Name>Nemerle.ComputationExpressions</Name>
+      <AssemblyName>Nemerle.ComputationExpressions.dll</AssemblyName>
+      <HintPath>C:\Program Files (x86)\Nemerle\net-4.0\Nemerle.ComputationExpressions.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -58,6 +63,9 @@
     </MacroReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComputationExpressions.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Hex.n">
       <SubType>Code</SubType>
     </Compile>

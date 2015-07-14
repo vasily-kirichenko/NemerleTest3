@@ -14,12 +14,11 @@ using System.Diagnostics
 
 module Program
     Main() : void
-        
-        def x = sha1("0102030405060708090A0B0C0D0E0F1011121314");
-        WriteLine(x.ToNList()); 
-
-        
-        
+        def x = IniFile("") 
+    
+    
+        //def x = sha1("0102030405060708090A0B0C0D0E0F1011121314");
+        //WriteLine(x.ToNList()); 
         
         //def m = comp maybe
         //    defcomp x = Some(1)
